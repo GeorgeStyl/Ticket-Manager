@@ -25,6 +25,7 @@ export default function DateModal({ open, handleClose }) {
       open={open}
       onClose={handleClose}
       aria-labelledby="modal-title"
+      
     >
       <Box sx={style}>
         <Typography id="modal-title" variant="h6" sx={{ mb: 1, fontWeight: 'bold' }}>

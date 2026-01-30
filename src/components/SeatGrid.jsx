@@ -20,7 +20,7 @@ const SeatGrid = () => {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', mt: 2 }}>
       <Typography variant="h6" sx={{ mb: 2 }}>
-        Επιλεγμένα IDs: {selectedSeats.length > 0 ? selectedSeats.join(', ') : 'Κανένα'}
+        Επιλεγμένες θέσεις: {selectedSeats.length > 0 ? selectedSeats.join(', ') : 'Καμία'}
       </Typography>
 
       {selectedSeats.length > 0 && (
