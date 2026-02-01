@@ -1,14 +1,11 @@
 import { Box, Button, Typography } from '@mui/material';
 import { useState } from 'react';
-import DateModal from './DateModal';
 
-const SeatGrid = () => {
+const SeatGrid = ({ selectedDate, isMobile }) => {
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const seats = Array.from({ length: 49 }, (_, i) => ({
-    id: `S${i + 1}`,
-    number: i + 1
+    id: `S${i + 1}`
   }));
 
   const toggleSeat = (id) => {
@@ -17,30 +14,22 @@ const SeatGrid = () => {
     );
   };
 
+  const handleFinalConfirm = () => {
+    if (!selectedDate || selectedSeats.length === 0) return;
+    console.log("Confirmed Date:", selectedDate.format('YYYY-MM-DD'));
+    console.log("Confirmed Seats:", selectedSeats);
+    alert(`Κράτηση για ${selectedDate.format('DD/MM/YYYY')}\nΘέσεις: ${selectedSeats.join(', ')}`);
+  };
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', mt: 2 }}>
-      <Typography variant="h6" sx={{ mb: 2 }}>
-        Επιλεγμένες θέσεις: {selectedSeats.length > 0 ? selectedSeats.join(', ') : 'Καμία'}
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+      <Typography variant="h6" sx={{ mb: 2, color: 'white' }}>
+        Επιλεγμένες: {selectedSeats.length > 0 ? selectedSeats.join(', ') : 'Καμία'}
       </Typography>
 
-      {selectedSeats.length > 0 && (
-        <Button 
-          variant="contained" 
-          color="secondary" 
-          onClick={() => setIsModalOpen(true)}
-          sx={{ mb: 3 }}
-        >
-          Επέλεξε ημ/νια
-        </Button>
-      )}
-
       <Box sx={{ 
-        display: 'grid', 
-        gridTemplateColumns: 'repeat(7, 1fr)', 
-        gap: 1,
-        width: '100%',
-        maxWidth: '450px',
-        px: 2
+        display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: isMobile ? 0.5 : 1,
+        width: '100%', maxWidth: isMobile ? '320px' : '450px', mb: 4 
       }}>
         {seats.map((seat) => (
           <Button
@@ -48,12 +37,10 @@ const SeatGrid = () => {
             variant={selectedSeats.includes(seat.id) ? "contained" : "outlined"}
             onClick={() => toggleSeat(seat.id)}
             sx={{
-              aspectRatio: '1/1',
-              minWidth: 0,
-              p: 0,
-              fontSize: { xs: '0.6rem', md: '0.8rem' },
+              aspectRatio: '1/1', minWidth: 0, p: 0, color: 'white',
+              borderColor: 'rgba(255,255,255,0.3)',
               bgcolor: selectedSeats.includes(seat.id) ? 'error.main' : 'transparent',
-              color: selectedSeats.includes(seat.id) ? 'white' : 'primary.main',
+              fontSize: isMobile ? '0.6rem' : '0.8rem'
             }}
           >
             {seat.id}
@@ -61,10 +48,16 @@ const SeatGrid = () => {
         ))}
       </Box>
 
-      <DateModal 
-        open={isModalOpen} 
-        handleClose={() => setIsModalOpen(false)} 
-      />
+      {selectedSeats.length > 0 && (
+        <Box sx={{ display: 'flex', gap: 2, width: '100%', maxWidth: '450px', px: 2 }}>
+          <Button fullWidth variant="outlined" color="inherit" onClick={() => setSelectedSeats([])} sx={{ color: 'white' }}>
+            Καθαρισμος
+          </Button>
+          <Button fullWidth variant="contained" color="success" onClick={handleFinalConfirm}>
+            Επιβεβαιωση
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
